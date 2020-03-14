@@ -23,11 +23,19 @@
     "@babel/core": "^7.8.7",
     "@babel/node": "^7.8.7",
     "@babel/preset-env": "^7.8.7",
+    "axios": "^0.19.2",
     "babel-preset-env": "^1.7.0",
+    "base64-img": "^1.0.4",
     "chalk": "^3.0.0",
     "cheerio": "^1.0.0-rc.3",
     "cherio": "^1.0.0-rc.2",
+    "fetch": "^1.1.0",
+    "fs": "0.0.1-security",
+    "md5": "^2.2.1",
+    "node-fetch": "^2.6.0",
+    "node-tesseract-ocr": "^1.0.0",
     "puppeteer": "^2.1.1",
+    "request": "^2.88.2",
     "transliteration": "^2.1.8"
   }
 }
