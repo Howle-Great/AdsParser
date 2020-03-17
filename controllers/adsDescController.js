@@ -21,25 +21,16 @@ export default class AsdDesc{
       const page = await browser.newPage()
       await page.goto(this.url, PAGE_PUPPETEER_OPTS)
       console.log("AsdDesc launch adsDescPage")
-      this.adsDesc_page = new adsDescPage(page)
+      this.adsDesc_page = new adsDescPage(page, browser)
       this.page = page
       this.browser = browser
     } catch (error) {
-      return error;
+      throw new Error(`Can't launch puppeteer. An error happened: \n${error}`)
     }
   }
 
   destroy() {
     this.browser.close()
-  }
-
-  async getContent() {
-    try {
-      const content = await this.page.content()
-      return content;
-    } catch (error) {
-      return error;
-    }
   }
 
   async parse() {
@@ -58,9 +49,7 @@ export default class AsdDesc{
       }
       return {arrayData, arrayRealtors}
     } catch (error) {
-      console.error("Error!!! ");
-      
-      return error
+      throw new Error(`Can't parse page. An error happened: \n${error}`)
     }
   }
   
