@@ -31,11 +31,15 @@
     "cherio": "^1.0.0-rc.2",
     "fetch": "^1.1.0",
     "fs": "0.0.1-security",
+    "fs-extra": "^9.0.0",
     "md5": "^2.2.1",
     "node-fetch": "^2.6.0",
     "node-tesseract-ocr": "^1.0.0",
+    "png-to-jpeg": "^1.0.1",
     "puppeteer": "^2.1.1",
     "request": "^2.88.2",
+    "tesseract-wrapper": "^1.1.1",
+    "tesseract.js": "^2.1.0",
     "transliteration": "^2.1.8"
   }
 }

@@ -1,10 +1,17 @@
 import chalk from 'chalk'
-
+import tesseract_wrapper from 'tesseract-wrapper'
+import QuickSaver from '../../helpers/saverFiles'
+import { createWorker } from 'tesseract.js'
+import base64Img from 'base64-img'
+// import ocr from 'ocr'
 
 export default class BasePage {
   constructor(page, browser) {
     this.page = page
     this.browser = browser
+    this.path = '/temp'
+    this.saver = new QuickSaver(this.path)
+    this.tesseract = createWorker();
   }
 
   async getContent(page = this.page) {
@@ -43,5 +50,26 @@ export default class BasePage {
     } catch (error) {
       throw new Error(`An error an occurred. 'isNotHidden' function in BasePage fell with: \n${error}`)
     }
+  }
+
+
+  async imageRecognition(imgBuf) {
+    // const base64Data = Buffer.from(imgBuf, 'base64'); 
+    const destpath = `${__dirname}/../..${this.path}/`
+    const filename = this.saver._generateRandomName()
+    base64Img.img(imgBuf, destpath, filename, (err, filepath) => {})
+
+    // this.saver.save(base64Data, 'png', 'base64')
+    await this.tesseract.load();
+    await this.tesseract.loadLanguage('eng');
+    await this.tesseract.initialize('eng');
+    await this.tesseract.setParameters({
+      tessedit_char_whitelist: '0123456789',
+    });
+    const filePath = `${__dirname}/../..${this.path}/${filename}.png`
+    const { data: { text } } = await this.tesseract.recognize(filePath);
+    console.log(text);
+    await this.tesseract.terminate();
+    return text
   }
 }

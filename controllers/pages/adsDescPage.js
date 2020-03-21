@@ -1,5 +1,6 @@
 import cheerio from 'cheerio'
 import md5 from 'md5'
+import pngToJpeg from 'png-to-jpeg'
 
 import BasePage from './basePage'
 
@@ -90,6 +91,8 @@ export default class adsDescPage extends BasePage {
         this.PAGEDATA_SHOWTELEPHONE_IMAGE
       )
 
+      const imgBuffer = new Buffer(phone.split(/,\s*/)[1],'base64');
+      pngToJpeg({quality: 90})(buffer).then(output => fs.writeFileSync("./some-file.jpeg", output));
       const phoneHash = md5(phone)
 
       
