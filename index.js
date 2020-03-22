@@ -6,30 +6,37 @@ import AsdDesc from './controllers/adsDescController'
 
 
 import adsDescPage from './controllers/pages/adsDescPage'
+import writeToJSON from './handlers/handlers'
 
 const SITE = 'https://www.avito.ru/moskva/kvartiry/sdam-ASgBAgICAUSSA8gQ?f=ASgBAQICAUSSA8gQAUDMCESSWZBZjlmMWQ'
-let pages = 100;
+let pages = 1;
 
 (async function main() {
   try {
-    // let desc = new AsdDesc(SITE)
-    // await desc.launch()
-    // let {arrayData, arrayRealtors} = await desc.parse()
-    // console.log(`arrayData: ${arrayData}`)
-    // console.log(`arrayRealtors: ${arrayRealtors}`)
-    // desc.destroy()
+    let desc = new AsdDesc(SITE)
+    await desc.launch()
+    let [arrayData, arrayRealtors] = await desc.parse()
+    writeToJSON(arrayData, 'ads.json')
+    // writeToJSON(arrayData, 'realtors.json')
 
-    const imgBase = `data:image/png;base64,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`
-    const page = new adsDescPage({},{})
-    let text = await page.imageRecognition(imgBase)
-    console.log(text);
+    console.log(`arrayData: ${arrayData}`)
+    console.log(`arrayRealtors: ${arrayRealtors}`)
+    desc.destroy()
+
+    // let data = [{
+    //   info: 'sad',
+    //   phone: '879223'
+    // },
+    // {
+    //   info: 'wddsad',
+    //   phone: '534534534'
+    // }]
     
-    
-    
+    // writeToJSON(data, 'ads.json')
+
   } catch (error) {
     console.log(chalk.red(`An error has occurred \n`))
     console.log(error)
-    
   }
 
 })()

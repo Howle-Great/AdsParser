@@ -3,6 +3,8 @@ import tesseract_wrapper from 'tesseract-wrapper'
 import QuickSaver from '../../helpers/saverFiles'
 import { createWorker } from 'tesseract.js'
 import base64Img from 'base64-img'
+import fs from 'fs-extra'
+
 // import ocr from 'ocr'
 
 export default class BasePage {
@@ -11,7 +13,6 @@ export default class BasePage {
     this.browser = browser
     this.path = '/temp'
     this.saver = new QuickSaver(this.path)
-    this.tesseract = createWorker();
   }
 
   async getContent(page = this.page) {
@@ -58,18 +59,20 @@ export default class BasePage {
     const destpath = `${__dirname}/../..${this.path}/`
     const filename = this.saver._generateRandomName()
     base64Img.img(imgBuf, destpath, filename, (err, filepath) => {})
-
-    // this.saver.save(base64Data, 'png', 'base64')
-    await this.tesseract.load();
-    await this.tesseract.loadLanguage('eng');
-    await this.tesseract.initialize('eng');
-    await this.tesseract.setParameters({
+    console.log(`Created PNG!`);
+    
+    let worker = createWorker();
+    await worker.load();
+    await worker.loadLanguage('eng');
+    await worker.initialize('eng');
+    await worker.setParameters({
       tessedit_char_whitelist: '0123456789',
     });
     const filePath = `${__dirname}/../..${this.path}/${filename}.png`
-    const { data: { text } } = await this.tesseract.recognize(filePath);
+    const { data: { text } } = await worker.recognize(filePath);
+    await fs.unlink(filePath)
     console.log(text);
-    await this.tesseract.terminate();
+    await worker.terminate();
     return text
   }
 }

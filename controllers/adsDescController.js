@@ -39,7 +39,7 @@ export default class AsdDesc{
       
       // const pageNumber = await this.adsDesc_page.getPagesNumber()
 
-      let {arrayData, arrayRealtors} = await this.adsDesc_page.getAllAds()
+      let [arrayData, arrayRealtors]= await this.adsDesc_page.getAllAds()
       console.log(`parse: arrayData - ${arrayData}, arrayRealtors - ${arrayRealtors}`);
       
       // for (let index = 2; index < pageNumber; index++) {
@@ -48,7 +48,7 @@ export default class AsdDesc{
       //   arrayData.concat(newArrayData)
       //   arrayRealtors.concat(newArrayRealtors)
       // }
-      return {arrayData, arrayRealtors}
+      return [arrayData, arrayRealtors]
     } catch (error) {
       throw new Error(`Can't parse page. An error happened: \n${error}`)
     }
