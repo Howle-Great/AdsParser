@@ -7,6 +7,7 @@ import AsdDesc from './controllers/adsDescController'
 
 import adsDescPage from './controllers/pages/adsDescPage'
 import writeToJSON from './handlers/handlers'
+import dataConverter from './helpers/dataConverter'
 
 const SITE = 'https://www.avito.ru/moskva/kvartiry/sdam-ASgBAgICAUSSA8gQ?f=ASgBAQICAUSSA8gQAUDMCESSWZBZjlmMWQ'
 let pages = 1;
@@ -33,6 +34,10 @@ let pages = 1;
     // }]
     
     // writeToJSON(data, 'ads.json')
+
+    
+    // console.log('OutDate: ' + dataConverter('22 марта в 19:40'));
+     
 
   } catch (error) {
     console.log(chalk.red(`An error has occurred \n`))

@@ -3,6 +3,7 @@ import md5 from 'md5'
 import pngToJpeg from 'png-to-jpeg'
 
 import BasePage from './basePage'
+import dataConverter from '../../helpers/dataConverter'
 
 export default class adsDescPage extends BasePage {
   constructor(page, browser) {
@@ -100,7 +101,7 @@ export default class adsDescPage extends BasePage {
       let data = {
         url: this.page.url(),
         title: $(this.PAGEDATA_TITLE).text(),
-        time: $(this.PAGEDATA_TIME).text(),
+        time: dataConverter($(this.PAGEDATA_TIME).text()),
         phone: phone,
         cost: $(this.PAGEDATA_COST).text(),
         commission: $(this.PAGEDATA_COMMISSION).text(),
