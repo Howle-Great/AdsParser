@@ -10,8 +10,12 @@ export default function dataConverter(data) {
   
   if (data.includes('сегодня в ')) {
     const time = data.replace('сегодня в ', '')
+    console.log(`0: ${currentData.toUTCString()}`);
     currentData.setMinutes(parseInt(time.split(':')[1]))
+    console.log(`1: ${currentData.toUTCString()}`);
+    
     currentData.setHours(parseInt(time.split(':')[0]))
+    console.log(`2: ${currentData.toUTCString()}, parse: ${parseInt(time.split(':')[0])}`);
   } else if (data.includes('вчера в ')) {
     const time = data.replace('вчера в ', '')
     currentData.setMinutes(parseInt(time.split(':')[1]))

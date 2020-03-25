@@ -39,16 +39,15 @@ export default class AsdDesc{
       
       // const pageNumber = await this.adsDesc_page.getPagesNumber()
 
-      let [arrayData, arrayRealtors]= await this.adsDesc_page.getAllAds()
-      console.log(`parse: arrayData - ${arrayData}, arrayRealtors - ${arrayRealtors}`);
+      let arrayData= await this.adsDesc_page.getAllAds()
+      console.log(`parse: arrayData - ${arrayData}`);
       
       // for (let index = 2; index < pageNumber; index++) {
       //   await this.page.goto(this.goToPage(this.url, index))
-      //   const {newArrayData, newArrayRealtors} = await this.adsDesc_page.getAllAds()
+      //   const newArrayData = await this.adsDesc_page.getAllAds()
       //   arrayData.concat(newArrayData)
-      //   arrayRealtors.concat(newArrayRealtors)
       // }
-      return [arrayData, arrayRealtors]
+      return arrayData
     } catch (error) {
       throw new Error(`Can't parse page. An error happened: \n${error}`)
     }

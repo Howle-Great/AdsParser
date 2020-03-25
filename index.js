@@ -6,7 +6,7 @@ import AsdDesc from './controllers/adsDescController'
 
 
 import adsDescPage from './controllers/pages/adsDescPage'
-import writeToJSON from './handlers/handlers'
+import {writeToJSON, writeRealtors} from './handlers/handlers'
 import dataConverter from './helpers/dataConverter'
 
 const SITE = 'https://www.avito.ru/moskva/kvartiry/sdam-ASgBAgICAUSSA8gQ?f=ASgBAQICAUSSA8gQAUDMCESSWZBZjlmMWQ'
@@ -14,29 +14,14 @@ let pages = 1;
 
 (async function main() {
   try {
-    let desc = new AsdDesc(SITE)
+    const desc = new AsdDesc(SITE)
     await desc.launch()
-    let [arrayData, arrayRealtors] = await desc.parse()
-    writeToJSON(arrayData, 'ads.json')
-    // writeToJSON(arrayData, 'realtors.json')
+    const parseData = await desc.parse()
+    writeRealtors(parseData)
 
-    console.log(`arrayData: ${arrayData}`)
-    console.log(`arrayRealtors: ${arrayRealtors}`)
     desc.destroy()
-
-    // let data = [{
-    //   info: 'sad',
-    //   phone: '879223'
-    // },
-    // {
-    //   info: 'wddsad',
-    //   phone: '534534534'
-    // }]
-    
-    // writeToJSON(data, 'ads.json')
-
-    
-    // console.log('OutDate: ' + dataConverter('22 марта в 19:40'));
+  
+    // console.log('OutDate: ' + dataConverter('сегодня в 01:02'));
      
 
   } catch (error) {

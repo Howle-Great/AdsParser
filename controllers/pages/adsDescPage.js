@@ -18,6 +18,7 @@ export default class adsDescPage extends BasePage {
     this.PAGEDATA_TITLE = '.title-info-title-text'
     this.PAGEDATA_TIME = '.title-info-metadata-item-redesign'
     this.PAGEDATA_SHOWTELEPHONE_BLOCK = 'a[data-marker="item-phone-button/card"]'
+    this.PAGEDATA_WRITEMESSAGE = '.item-actions-line a[data-marker="messenger-button/link"]' 
     this.PAGEDATA_SHOWTELEPHONE_IMAGE = '[data-marker="item-phone-button/card"] img'
     this.PAGEDATA_TELEPHONEBLOCK_CLOSE = '.b-popup.item-popup .close'
     this.PAGEDATA_TELEPHONEBLOCK_IMAGE = '.b-popup.item-popup img'
@@ -72,18 +73,26 @@ export default class adsDescPage extends BasePage {
 
   async parseData() {
     try {
+      // const haventNumberBlock = await this.newPage.evaluate((selectorTelephone, selectorWriteMessage) => {
+      //   if (document.querySelector(selectorWriteMessage) && !document.querySelector(selectorTelephone)) {
+      //     return Promise.resolve(false)
+      //   } else {
+      //     return Promise.resolve(true)
+      //   }
+      // }, this.PAGEDATA_SHOWTELEPHONE_BLOCK, this.PAGEDATA_WRITEMESSAGE)
+      // if (haventNumberBlock) {
+      //   return false;
+      // }
       const content = await this.getContent(this.newPage)
       const $ = cheerio.load(content)
 
       await this.click(this.PAGEDATA_SHOWTELEPHONE_BLOCK, this.newPage)
       console.log(`parseData PAGEDATA_SHOWTELEPHONE_BLOCK`)
-      // await this.newPage.waitFor(10000);
+
       const signInWindowIsNotHidden = await this.isNotHidden(this.SINGIN_BLOCK, this.newPage);
       if (signInWindowIsNotHidden) {
         await this.newPage.keyboard.press('Escape')
         await this.click(this.PAGEDATA_SHOWTELEPHONE_BLOCK, this.newPage)
-
-      //   await this.click(this.SINGIN_BLOCK_CLOSE, this.newPage)
       }
 
       await this.click(this.PAGEDATA_TELEPHONEBLOCK_CLOSE, this.newPage)
@@ -95,24 +104,20 @@ export default class adsDescPage extends BasePage {
         this.PAGEDATA_SHOWTELEPHONE_IMAGE
       )
 
-      phone = await this.imageRecognition(phone)
       console.log(`Phone recognized! ${phone}`);
       
       let data = {
         url: this.page.url(),
         title: $(this.PAGEDATA_TITLE).text(),
-        time: dataConverter($(this.PAGEDATA_TIME).text()),
+        data: $(this.PAGEDATA_TIME).text(),
         phone: phone,
         cost: $(this.PAGEDATA_COST).text(),
         commission: $(this.PAGEDATA_COMMISSION).text(),
       }
 
-      console.log(`parseData - data is: ${[data.url, data.title, data.time, data.phone, data.cost, data.commission]}`)
+      console.log(`parseData - data is: ${[data.url, data.title, data.data, data.phone, data.cost, data.commission]}`)
       
-      return [
-        data,
-        phone
-      ]
+      return data
     } catch (error) {
       throw new Error(`Can't parse data. An error happened: \n${error}`)
     }
@@ -123,10 +128,10 @@ export default class adsDescPage extends BasePage {
       console.log("getAd");
       
       this.newPage = await this.clickOnAd(num)
-      const [data, phone] = await this.parseData()
+      const data = await this.parseData()
       this.newPage.close()
       delete this.newPage
-      return [data, phone] ;
+      return data ;
     } catch (error) {
       throw new Error(`Can't get ad from page. An error happened: \n${error}`)
     }
@@ -148,14 +153,16 @@ export default class adsDescPage extends BasePage {
           continue
         }
 
-        if (iElem >= 5) {
+        if (iElem >= 3) {
           continue
         }
-        const [data, phone]  = await this.getAd(iElem + 1)
+        const data  = await this.getAd(iElem + 1)
+        if (data === false) {
+          continue
+        }
         arrayData.push(data)
-        arrayRealtors.push(phone)
       }
-      return [arrayData, arrayRealtors]
+      return arrayData
     } catch (error) {
       throw new Error(`Can't get all ads from page. An error happened: \n${error}`)
     }
